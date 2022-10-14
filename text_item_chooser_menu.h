@@ -1,5 +1,6 @@
 /**
- * @file text_item_chooser_screen.h
+ * @file text_item_chooser_menu.h
+ *
  * @brief this class describes a View for choosing an item from a menu
  * of text items. The up and down buttons allow navigating the menu. The
  * enter button calls the selection callback and exits the View. The Home or
