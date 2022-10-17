@@ -29,6 +29,7 @@
  */
 #pragma once
 #include <cstdint>
+#include <cstdio>
 #include "parson.h"
 namespace rppicomidi
 {
