@@ -116,6 +116,7 @@ public:
     }
     virtual const char* get_menu_item_text(int idx) {if (idx >=0 && idx < (int)items.size()) return items[idx]->get_text(); return nullptr; }
 
+    virtual void set_menu_item_text(int idx, const char* text_) {if (idx >=0 && idx < (int)items.size()) items[idx]->set_text(text_);}
     virtual Select_result on_select(View** new_view);
 
     virtual void on_increment(uint32_t delta, bool is_shifted);
