@@ -59,13 +59,16 @@ public:
      */
     Int_spinner_menu_item(const char* text_, Mono_graphics& screen_, const Mono_mono_font& font_,
         int ndigits_, int nhex_digits_, bool hex_format_,
-        T (*get_fn_)(void*), T (*incr_fn_)(void*, int), void* context_) :
+        T (*get_fn_)(void*), T (*incr_fn_)(void*, int), void* context_, const char* units_=nullptr) :
         Menu_item{text_, screen_, font_},
         ndigits{ndigits_}, nhex_digits{nhex_digits_}, hex_format{hex_format_}, 
         get_fn{get_fn_}, incr_fn{incr_fn_}, context{context_}
     {
         editing = false;
         assert(ndigits >= nhex_digits);
+        memset(units, 0, max_units_characters+1);
+        if (units_)
+            set_units(units_);
     }
 
     
@@ -74,11 +77,11 @@ public:
         if (is_hidden())
             return;
         T value = get_fn(context);
-        char numstr[ndigits+1];
+        char numstr[ndigits+1+max_units_characters];
         if (hex_format)
-            snprintf(numstr, nhex_digits+1, "%0*x", nhex_digits, value);
+            snprintf(numstr, nhex_digits+1+max_units_characters, "%0*x%s", nhex_digits, value, units);
         else
-            snprintf(numstr, ndigits+1, "%-*d", ndigits, value);
+            snprintf(numstr, ndigits+1+max_units_characters, "%-*d%s", ndigits, value, units);
 
         if (is_highlighted() && !editing) {
             // draw both the label and number in reverse text
@@ -132,6 +135,12 @@ public:
             return View::Select_result::take_focus;
         return View::Select_result::give_focus;
     }
+
+    void set_units(const char* units_)
+    {
+        strncpy(units, units_, max_units_characters);
+        units[max_units_characters]='\0';
+    }
 protected:
     void incr(int delta)
     {
@@ -149,5 +158,7 @@ protected:
     T (*incr_fn)(void*, int);
     void* context;
     bool editing;       //<! true if editing the int value; false if displaying the number as text only
+    static const uint8_t max_units_characters=4;
+    char units[max_units_characters];
 };
 }
