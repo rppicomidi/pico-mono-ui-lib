@@ -79,7 +79,7 @@ public:
         T value = get_fn(context);
         char numstr[ndigits+1+max_units_characters];
         if (hex_format)
-            snprintf(numstr, nhex_digits+1+max_units_characters, "%0*x%s", nhex_digits, value, units);
+            snprintf(numstr, nhex_digits+1+max_units_characters, "%0*X%s", nhex_digits, value, units);
         else
             snprintf(numstr, ndigits+1+max_units_characters, "%-*d%s", ndigits, value, units);
 
@@ -141,6 +141,8 @@ public:
         strncpy(units, units_, max_units_characters);
         units[max_units_characters]='\0';
     }
+
+    void set_display_hex(bool is_hex) { hex_format = is_hex; }
 protected:
     void incr(int delta)
     {
