@@ -66,7 +66,7 @@ public:
     void set_select_action(View::Select_result new_action) { select_action = new_action; }
 protected:
     View* callback_view;
-    void (*callback)(View* callback_view_);
+    void (*callback)(View*, View**);
     View::Select_result select_action;
 };
 }
