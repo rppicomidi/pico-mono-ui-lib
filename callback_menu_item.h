@@ -35,11 +35,34 @@ namespace rppicomidi
 class Callback_menu_item : public Menu_item
 {
 public:
-    Callback_menu_item(const char* text_, Mono_graphics& screen_, const Mono_mono_font& font_, View* callback_view_, void (*callback_)(View*),
+    /**
+     * @brief Construct a new Callback_menu_item object
+     *
+     * @param text_ the menu item text
+     * @param screen_ the drawing screen object
+     * @param font_ the font to render text
+     * @param callback_view_ the View that implements the callback function
+     * @param callback_ the callback function with first argument the "this" pointer for the View object of the class that implemented the callback,
+     * and the second argument is a pointer to the new view if the select_action is new_view
+     * @param select_action_ the default select action for this object
+     */
+    Callback_menu_item(const char* text_, Mono_graphics& screen_, const Mono_mono_font& font_, View* callback_view_, void (*callback_)(View*, View**),
     View::Select_result select_action_=View::Select_result::no_op)  :
         Menu_item{text_, screen_, font_}, callback_view{callback_view_}, callback{callback_}, select_action{select_action_} {}
 
-    virtual View::Select_result on_select(View**) { callback(callback_view); return select_action; }
+    /**
+     * @brief handle the select action for this menu item
+     *
+     * @param view_ set *view_ to a pointer to the new view if select_action is new_view
+     * @return select_action
+     */
+    virtual View::Select_result on_select(View** view_) { callback(callback_view, view_); return select_action; }
+
+    /**
+     * @brief Set the select action value for this Menu_item
+     *
+     * @param new_action the new value for select_action
+     */
     void set_select_action(View::Select_result new_action) { select_action = new_action; }
 protected:
     View* callback_view;
