@@ -96,6 +96,8 @@ public:
      */
     virtual void clear()
     {
+        for (auto& item:items)
+            delete item;
         items.clear();
         current_item = items.end();
     }
