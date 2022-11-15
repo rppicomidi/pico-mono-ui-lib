@@ -68,6 +68,7 @@ public:
     virtual void add_menu_item(Menu_item* item_) {
         items.push_back(item_);
         current_item = items.begin();
+        scroll_offset = 0;
     }
 
     /**
