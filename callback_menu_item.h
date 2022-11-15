@@ -40,6 +40,7 @@ public:
         Menu_item{text_, screen_, font_}, callback_view{callback_view_}, callback{callback_}, select_action{select_action_} {}
 
     virtual View::Select_result on_select(View**) { callback(callback_view); return select_action; }
+    void set_select_action(View::Select_result new_action) { select_action = new_action; }
 protected:
     View* callback_view;
     void (*callback)(View* callback_view_);
