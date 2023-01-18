@@ -114,10 +114,11 @@ public:
      * @brief screen manager calls this function in response to a real
      * (or virtual) button press or release
      *
-     * @param key_code a number to identify the button: application dependent
+     * @param key_code a number to identify the button: application dependent but usally HID keyboard code
+     * @param modifiers a bit map to identify shift, control, alt, etc. but usually HID keyboard modifier bits
      * @param pressed true if the key is pressed, false if released
      */
-    virtual void on_key(uint32_t key_code, bool pressed) {(void)key_code; (void)pressed;}
+    virtual void on_key(uint8_t key_code, uint8_t modifiers, bool pressed) {(void)key_code; (void)modifiers; (void)pressed;}
 
     virtual Select_result set_has_focus(bool has_focus_) {
         has_focus = has_focus_;

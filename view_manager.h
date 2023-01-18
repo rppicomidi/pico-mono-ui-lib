@@ -106,11 +106,12 @@ public:
      * @brief convey to the current view that the UI keyboard action has occurred
      *
      * @param key_code is the code for the keyboard key
+     * @param modifiers is the modifier bits for the keyboard report
      * @param pressed is true if the key was pressed and false if it was released
      */
-    void on_key(uint32_t key_code, bool pressed) {if (current_view != view_stack.end()) (*current_view)->on_key(key_code, pressed); }
+    void on_key(uint8_t key_code, uint8_t modifiers, bool pressed) {if (current_view != view_stack.end()) (*current_view)->on_key(key_code, modifiers, pressed); }
 private:
-    void switch_current_view();
+    //void switch_current_view();
     std::vector<View*> view_stack;
     std::vector<View*>::iterator current_view;
 };
