@@ -34,9 +34,15 @@ rppicomidi::Text_item_chooser_menu::Text_item_chooser_menu(Mono_graphics& screen
 
 }
 
+void rppicomidi::Text_item_chooser_menu::exit()
+ {
+    if (!selected)
+        selection_callback(callback_view, -1);
+}
+
 rppicomidi::View::Select_result rppicomidi::Text_item_chooser_menu::on_select(rppicomidi::View**)
 {
-    int idx = get_current_item_idx();
-    selection_callback(callback_view, idx);
+    selected = true;
+    selection_callback(callback_view, get_current_item_idx());
     return View::Select_result::exit_view;
 }
