@@ -46,10 +46,13 @@ public:
      * @param selection_callback_ the method that is called on press of the Enter button
      */
     Text_item_chooser_menu(Mono_graphics& screen_, uint8_t y_, View* callback_view_,
-        void (*selection_callback_)(View* view, int& selected_idx));
+        void (*selection_callback_)(View* view, int selected_idx));
     virtual View::Select_result on_select(View**);
+    void entry() final { selected = false; Menu::entry(); }
+    void exit() final;
 protected:
     View* callback_view;
-    void (*selection_callback)(View* view, int& selected_idx);
+    void (*selection_callback)(View* view, int selected_idx);
+    bool selected;
 };
 }

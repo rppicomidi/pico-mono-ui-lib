@@ -27,7 +27,7 @@
 #include "text_item_chooser_menu.h"
 
 rppicomidi::Text_item_chooser_menu::Text_item_chooser_menu(Mono_graphics& screen_, uint8_t y_, View* view_, 
-        void (*selection_callback_)(View* view, int& selected_idx)) :
+        void (*selection_callback_)(View* view, int selected_idx)) :
             Menu{screen_, y_, screen_.get_font_12()}, callback_view{view_}, selection_callback{selection_callback_}
             
 {
