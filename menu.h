@@ -145,17 +145,7 @@ public:
         return current_item-items.begin();
     }
 
-    int set_current_item_idx(int idx)
-    {
-        if (idx >= 0 && idx < (int)items.size()) {
-            (*current_item)->set_highlighted(false);
-            current_item = items.begin() + idx;
-        }
-        else {
-            idx = -1;
-        }
-        return idx;
-    }
+    int set_current_item_idx(int idx);
 
     Menu_item* get_current_item()
     {

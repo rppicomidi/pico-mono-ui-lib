@@ -172,6 +172,28 @@ rppicomidi::Menu::Select_result rppicomidi::Menu::on_select(View** new_view)
     return result;
 }
 
+int rppicomidi::Menu::set_current_item_idx(int idx)
+{
+    if (idx >= 0 && idx < (int)items.size()) {
+        if (idx < scroll_offset) {
+            scroll_offset = idx;
+        }
+        else if (idx >+ scroll_offset + max_visisble_items) {
+            scroll_offset = idx - max_visisble_items + 1;
+        }
+
+        if (has_focus)
+            (*current_item)->exit();
+        (*current_item)->set_highlighted(false);
+        current_item = items.begin() + idx;
+        // Adjust scroll_offset in case the current item is not visible;
+    }
+    else {
+        idx = -1;
+    }
+    return idx;
+}
+
 void rppicomidi::Menu::draw()
 {
     // Clear the bounding rectangle
