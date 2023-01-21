@@ -31,6 +31,8 @@
 
 rppicomidi::View::Select_result rppicomidi::View_launch_menu_item::on_select(View** new_view_)
 {
+    if (is_disabled())
+        return View::no_op;
     *new_view_ = &new_view;
     return View::new_view;
 }

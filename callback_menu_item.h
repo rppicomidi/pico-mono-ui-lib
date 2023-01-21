@@ -56,7 +56,12 @@ public:
      * @param view_ set *view_ to a pointer to the new view if select_action is new_view
      * @return select_action
      */
-    virtual View::Select_result on_select(View** view_) { callback(callback_view, view_); return select_action; }
+    virtual View::Select_result on_select(View** view_) {
+        if (is_disabled())
+            return View::no_op;
+        callback(callback_view, view_);
+        return select_action;
+    }
 
     /**
      * @brief Set the select action value for this Menu_item
