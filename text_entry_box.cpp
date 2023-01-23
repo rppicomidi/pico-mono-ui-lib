@@ -90,6 +90,19 @@ void rppicomidi::Text_entry_box::entry()
         screen.center_string(font, title.c_str(),0);
 }
 
+void rppicomidi::Text_entry_box::exit()
+{
+    if (!text_ok)
+        done_cb(cb_context, text_ok);
+}
+
+rppicomidi::View::Select_result rppicomidi::Text_entry_box::on_select(View**) {
+    text_ok = true;
+    done_cb(cb_context, text_ok);
+    return Select_result::exit_view;
+}
+
+
 void rppicomidi::Text_entry_box::on_left(uint32_t, bool)
 {
     if (cursor_position > 0) {

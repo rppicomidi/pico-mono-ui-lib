@@ -43,21 +43,21 @@ public:
      */
     Text_entry_box(Mono_graphics& screen_, const char* title_, size_t max_chars_,
         const std::string illegal_chars_, View* cb_context_, void (*done_cb_)(View*, bool ), bool hide_typing_=false);
-    void draw() final;
-    void entry() final;
-    void exit() final { done_cb(cb_context, text_ok); }
+    void draw();
+    void entry();
+    void exit();
     /**
      * @brief handle pressing Select, which means accept the input, so text_ok is true;
      * 
      * @param new_view_ unused
      * @return Select_result will be exit_view
      */
-    Select_result on_select(View** new_view_) final { (void)new_view_; text_ok = true; return Select_result::exit_view; }
+    Select_result on_select(View**);
     //void on_increment(uint32_t delta, bool is_shifted) final;
     //void on_decrement(uint32_t delta, bool is_shifted) final;
-    void on_left(uint32_t delta, bool is_shifted) final;
-    void on_right(uint32_t delta, bool is_shifted) final;
-    void on_key(uint8_t key_code, uint8_t modifiers, bool pressed) final;
+    void on_left(uint32_t delta, bool is_shifted);
+    void on_right(uint32_t delta, bool is_shifted);
+    void on_key(uint8_t key_code, uint8_t modifiers, bool pressed);
     /**
      * @brief Get the text typed into the Text_entry_box so far
      * 
@@ -76,7 +76,7 @@ public:
      * @brief Set the cursor to the end of the text_typed string
      */
     void set_cursor_to_end();
-private:
+protected:
     void delete_char_at_cursor_position();
     const Mono_mono_font font;
     const std::string title;
