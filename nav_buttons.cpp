@@ -100,7 +100,7 @@ void rppicomidi::Nav_buttons::poll()
                         if (is_shifted)
                             view_manager.go_home();
                         else
-                            view_manager.pop_view();
+                            view_manager.on_back();
                         break;
                     case BUTTON_ENTER:
                         view_manager.on_select();

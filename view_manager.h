@@ -103,6 +103,11 @@ public:
     void on_select();
 
     /**
+     * @brief convey to the current view that the UI back action has occurred
+     */
+    void on_back();
+
+    /**
      * @brief convey to the current view that the UI keyboard action has occurred
      *
      * @param key_code is the code for the keyboard key

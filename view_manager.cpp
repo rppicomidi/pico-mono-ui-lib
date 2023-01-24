@@ -76,3 +76,17 @@ void rppicomidi::View_manager::on_select()
         }
     }
 }
+
+void rppicomidi::View_manager::on_back()
+{
+    if (current_view != view_stack.end()) {
+        View* new_view_;
+        View::Select_result result = (*current_view)->on_back(&new_view_);
+        if (result == View::Select_result::exit_view) {
+            pop_view();
+        }
+        else if (result == View::Select_result::new_view) {
+            push_view(new_view_);
+        }
+    }
+}

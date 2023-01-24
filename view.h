@@ -110,6 +110,9 @@ public:
 
     virtual void on_left(uint32_t delta, bool is_shifted) {(void)delta; (void)is_shifted;}
     virtual void on_right(uint32_t delta, bool is_shifted) {(void)delta; (void)is_shifted;}
+
+    virtual Select_result on_back(View** new_view_) { *new_view_ = nullptr; return Select_result::exit_view; }
+
     /**
      * @brief screen manager calls this function in response to a real
      * (or virtual) button press or release

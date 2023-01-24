@@ -132,7 +132,7 @@ void rppicomidi::Hid_keyboard::process_kbd_report(hid_keyboard_report_t const *r
                     vm->go_home();
                     break;
                 case HID_KEY_ESCAPE:
-                    vm->pop_view();
+                    vm->on_back();
                     break;
                 case HID_KEY_ENTER:
                 case HID_KEY_KEYPAD_ENTER:
