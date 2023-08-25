@@ -34,6 +34,9 @@ void rppicomidi::View_manager::push_view(View* new_view)
     current_view = view_stack.end() - 1;
     (*current_view)->entry();
     auto result = (*current_view)->set_has_focus(true);
+    #if CFG_TUSB_DEBUG < 1
+    (void)result;
+    #endif
     assert(result != View::Select_result::exit_view); //pushing a new view view should not immediately exit
     (*current_view)->draw();
 }
