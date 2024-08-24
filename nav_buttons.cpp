@@ -27,7 +27,7 @@
 #include <cstdint>
 #include "pico/stdlib.h"
 #include "nav_buttons.h"
-
+#define BUTTON_MASK ((1<<BUTTON_UP) | (1<<BUTTON_DOWN) | (1<<BUTTON_LEFT) | (1<<BUTTON_RIGHT) | (1<<BUTTON_ENTER) | (1<<BUTTON_BACK) | (1<<BUTTON_SHIFT))
 rppicomidi::Nav_buttons::Nav_buttons(View_manager& view_manager_) :
     view_manager{view_manager_}, prev_buttons{0}, previous_timestamp{get_absolute_time()},
     held_buttons_timeout{0},max_button_repeat_interval_ms{400}, button_repeat_interval_ms{max_button_repeat_interval_ms},
@@ -56,6 +56,13 @@ rppicomidi::Nav_buttons::Nav_buttons(View_manager& view_manager_) :
     gpio_pull_up(BUTTON_BACK);
     gpio_pull_up(BUTTON_SHIFT);
     memset(debounce, 0, sizeof(debounce));
+    button_mask[BTN_IDX_UP] = 1 << BUTTON_UP;
+    button_mask[BTN_IDX_DN] = 1 << BUTTON_DOWN;
+    button_mask[BTN_IDX_LF] = 1 << BUTTON_LEFT;
+    button_mask[BTN_IDX_RT] = 1 << BUTTON_RIGHT;
+    button_mask[BTN_IDX_EN] = 1 << BUTTON_ENTER;
+    button_mask[BTN_IDX_BK] = 1 << BUTTON_BACK;
+    button_mask[BTN_IDX_SH] = 1 << BUTTON_SHIFT;
 }
 
 void rppicomidi::Nav_buttons::poll()
@@ -67,7 +74,7 @@ void rppicomidi::Nav_buttons::poll()
     if (diff < 1000)
         return;
     previous_timestamp = now;
-    uint8_t buttons = (uint8_t)(~(gpio_get_all() >> 6) & 0x7f);
+    uint32_t buttons = (~(gpio_get_all()) & BUTTON_MASK);
     bool still_bouncing = (buttons != debounce[0]);
     for (int idx=1; idx < ndebounce; idx ++) {
         still_bouncing = still_bouncing || (buttons != debounce[idx]);
@@ -77,32 +84,29 @@ void rppicomidi::Nav_buttons::poll()
 
     if (!still_bouncing) {
         if (buttons != prev_buttons || held_buttons_timeout <= 1) {
-            for (int bit = 0; bit < 7; bit++) {
-                uint8_t mask = 1 << bit;
-                uint8_t shift_mask = 1 << (BUTTON_SHIFT - 6);
-                bool is_shifted = (buttons & shift_mask) != 0;
-                if (mask & buttons) {
-                    uint8_t button = bit + 6;
-                    switch (button) {
-                    case BUTTON_UP:
+            bool is_shifted = (buttons & button_mask[BTN_IDX_SH]) != 0;
+            for (uint8_t idx = 0; idx < nbuttons; idx++) {
+                if (button_mask[idx] & buttons) {
+                    switch (idx) {
+                    case BTN_IDX_UP:
                         view_manager.on_increment(1, is_shifted);
                         break;
-                    case BUTTON_DOWN:
+                    case BTN_IDX_DN:
                         view_manager.on_decrement(1, is_shifted);
                         break;
-                    case BUTTON_LEFT:
+                    case BTN_IDX_LF:
                         view_manager.on_left(1, is_shifted);
                         break;
-                    case BUTTON_RIGHT:
+                    case BTN_IDX_RT:
                         view_manager.on_right(1, is_shifted);
                         break;
-                    case BUTTON_BACK:
+                    case BTN_IDX_BK:
                         if (is_shifted)
                             view_manager.go_home();
                         else
                             view_manager.on_back();
                         break;
-                    case BUTTON_ENTER:
+                    case BTN_IDX_EN:
                         view_manager.on_select();
                         break;
                     default:
@@ -131,26 +135,24 @@ void rppicomidi::Nav_buttons::poll()
     }
 }
 
-const char* rppicomidi::Nav_buttons::get_button_name(uint8_t button_map)
+const char* rppicomidi::Nav_buttons::get_button_name(uint32_t button_map)
 {
-    for (int bit = 0; bit < 7; bit++) {
-        uint8_t mask = 1 << bit;
-        if (mask & button_map) {
-            uint8_t button = bit + 6;
-            switch (button) {
-            case BUTTON_UP:
+    for (uint8_t idx = 0; idx < nbuttons; idx++) {
+        if (button_mask[idx] & button_map) {
+            switch (idx) {
+            case BTN_IDX_UP:
                 return "UP";
-            case BUTTON_DOWN:
+            case BTN_IDX_DN:
                 return "DOWN";
-            case BUTTON_LEFT:
+            case BTN_IDX_LF:
                 return "LEFT";
-            case BUTTON_RIGHT:
+            case BTN_IDX_RT:
                 return "RIGHT";
-            case BUTTON_SHIFT:
+            case BTN_IDX_SH:
                 return "HOME";
-            case BUTTON_BACK:
+            case BTN_IDX_BK:
                 return "BACK";
-            case BUTTON_ENTER:
+            case BTN_IDX_EN:
                 return "ENTER";
             default:
                 return "UNKNONW";

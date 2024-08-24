@@ -62,15 +62,18 @@ public:
     Nav_buttons(View_manager& view_manager_);
     void poll();
 private:
-    const char* get_button_name(uint8_t button_map);
+    const char* get_button_name(uint32_t button_map);
     View_manager& view_manager;
     static const uint8_t ndebounce=10;
-    uint8_t debounce[ndebounce];
-    uint8_t prev_buttons;
+    uint32_t debounce[ndebounce];
+    uint32_t prev_buttons;
     absolute_time_t previous_timestamp;
     int32_t held_buttons_timeout;
     const int32_t max_button_repeat_interval_ms;
     int32_t button_repeat_interval_ms;
     int32_t acceleration_count;
+    enum Btn_idx {BTN_IDX_UP, BTN_IDX_DN, BTN_IDX_LF, BTN_IDX_RT, BTN_IDX_EN, BTN_IDX_BK, BTN_IDX_SH};
+    static const uint8_t nbuttons = 7;
+    uint32_t button_mask[nbuttons]; // button_mask[BTN_IDX_SH] is the bit mask of shift button
 };
 }
