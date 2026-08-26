@@ -57,7 +57,7 @@ public:
     //void on_decrement(uint32_t delta, bool is_shifted) final;
     void on_left(uint32_t delta, bool is_shifted);
     void on_right(uint32_t delta, bool is_shifted);
-    void on_key(uint8_t key_code, uint8_t modifiers, bool pressed);
+    virtual void on_key(uint8_t key_code, uint8_t modifiers, bool pressed);
     /**
      * @brief Get the text typed into the Text_entry_box so far
      * 

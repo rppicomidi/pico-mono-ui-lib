@@ -129,7 +129,7 @@ public:
     virtual void on_left(uint32_t delta, bool is_shifted) {if (current_item != items.end()) (*current_item)->on_left(delta, is_shifted); }
     virtual void on_right(uint32_t delta, bool is_shifted) {if (current_item != items.end()) (*current_item)->on_right(delta, is_shifted); }
 
-    virtual void on_key(uint32_t key_code, bool pressed) {(void)key_code; (void)pressed;}
+    //virtual void on_key(uint32_t key_code, bool pressed) {(void)key_code; (void)pressed;}
 
     size_t get_num_items() {return items.size(); }
 
