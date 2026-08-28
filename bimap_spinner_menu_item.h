@@ -64,11 +64,11 @@ public:
     Bimap_spinner_menu_item(const char* text_, Mono_graphics& screen_, const Mono_mono_font& font_,
         size_t bimap_idx_, int ndigits_, int nhex_digits_, bool hex_format_,
         T (*get_fn_)(void* context_, size_t bimap_idx, size_t element_idx),
-        T (*incr_fn_)(void* context_, size_t bimap_idx, size_t element_idx, int delta), void* context_) :
+        T (*incr_fn_)(void* context_, size_t bimap_idx, size_t element_idx, int delta), void* context_, bool display_maxval_=false):
         Menu_item{text_, screen_, font_},
         bimap_idx{bimap_idx_},
         ndigits{ndigits_}, nhex_digits{nhex_digits_}, hex_format{hex_format_},
-        get_fn{get_fn_}, incr_fn{incr_fn_}, context{context_}
+        get_fn{get_fn_}, incr_fn{incr_fn_}, context{context_}, display_maxval{display_maxval_}
     {
         editing = 2;
         assert(ndigits >= nhex_digits);
@@ -91,16 +91,18 @@ public:
             snprintf(first_str, ndigits+1, "%*d", ndigits, first);
             snprintf(second_str, ndigits+1, "%-*d", ndigits, second);
         }
-        int disp_digits = hex_format? nhex_digits:ndigits;
-        if (first == max_val) {
-            for (int idx=0; idx < disp_digits; idx++)
-                first_str[idx]='*';
-            first_str[disp_digits] = '\0';
-        }
-        if (second == max_val) {
-            for (int idx=0; idx < disp_digits; idx++)
-                second_str[idx]='*';
-            second_str[disp_digits] = '\0';
+        if (!display_maxval) {
+            int disp_digits = hex_format? nhex_digits:ndigits;
+            if (first == max_val) {
+                for (int idx=0; idx < disp_digits; idx++)
+                    first_str[idx]='*';
+                first_str[disp_digits] = '\0';
+            }
+            if (second == max_val) {
+                for (int idx=0; idx < disp_digits; idx++)
+                    second_str[idx]='*';
+                second_str[disp_digits] = '\0';
+            }
         }
         if (is_highlighted() && editing == 2) {
             // draw the label and both numbers in reverse text
@@ -203,6 +205,7 @@ protected:
     T (*get_fn)(void* context_, size_t bimap_idx, size_t element_idx);
     T (*incr_fn)(void* context_, size_t bimap_idx, size_t element_idx, int delta);
     void* context;
+    bool display_maxval;
     size_t editing;       //<! 0 if editing the first value, 1 if editing the second value, 2 if not editing
 };
 }
