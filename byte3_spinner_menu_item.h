@@ -89,24 +89,7 @@ public:
             snprintf(second_str, ndigits+1, "%*d", ndigits, second);
             snprintf(third_str, ndigits+1, "%*d", ndigits, third);
         }
-#if 0
-        int disp_digits = hex_format? nhex_digits:ndigits;
-        if (first == get_max_fn(context, 0)) {
-            for (int idx=0; idx < disp_digits; idx++)
-                first_str[idx]='*';
-            first_str[disp_digits] = '\0';
-        }
-        if (second == get_max_fn(context, 1)) {
-            for (int idx=0; idx < disp_digits; idx++)
-                second_str[idx]='*';
-            second_str[disp_digits] = '\0';
-        }
-        if (third == get_max_fn(context, 2)) {
-            for (int idx=0; idx < disp_digits; idx++)
-                third_str[idx]='*';
-            third_str[disp_digits] = '\0';
-        }
-#endif
+
         if (is_highlighted() && editing == 3) {
             // draw the label and all 3 numbers in reverse text
             screen.draw_string(font, 0, last_draw_y, text, strlen(text), Pixel_state::PIXEL_ZERO, Pixel_state::PIXEL_ONE);
