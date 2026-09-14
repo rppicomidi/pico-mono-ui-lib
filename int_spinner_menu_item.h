@@ -66,7 +66,7 @@ public:
     {
         editing = false;
         assert(ndigits >= nhex_digits);
-        memset(units, 0, max_units_characters+1);
+        memset(units, 0, sizeof(units));
         if (units_)
             set_units(units_);
     }
@@ -161,6 +161,6 @@ protected:
     void* context;
     bool editing;       //<! true if editing the int value; false if displaying the number as text only
     static const uint8_t max_units_characters=4;
-    char units[max_units_characters];
+    char units[max_units_characters + 1];
 };
 }
