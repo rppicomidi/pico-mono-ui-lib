@@ -42,7 +42,7 @@ class Setting_bimap
 {
 public:
     Setting_bimap(const char* name_, T minval_, T maxval_) :
-        name{name_}, minval{minval_}, maxval{maxval_}
+        name{name_}, minval{minval_, minval_}, maxval{maxval_, maxval_}
     {
         set_default();
     }
@@ -51,21 +51,25 @@ public:
     virtual ~Setting_bimap()=default;
     /**
      * @brief Get the minimum value for this setting
-     * 
+     *
+     * @param element_idx
      * @return T the minimum value for this setting
      */
-    T get_min() { return minval; }
+    T get_min(size_t element_idx) { return minval[element_idx]; }
+    T get_min() { return minval[0]; }
 
-    void set_min(T minval_) { minval=minval_; }
-
+    void set_min(T minval_, size_t element_idx) { minval[element_idx]=minval_; }
+    void set_min(T minval_) { minval[0]=minval_; minval[1]=minval_; }
     /**
      * @brief Get the maximum value for this setting
      * 
      * @return T the maximum value for this setting
      */
-    T get_max() { return maxval; }
+    T get_max(size_t element_idx) { element_idx = element_idx & 1; return maxval[element_idx]; }
+    T get_max() { return maxval[0]; }
 
-    void set_max(T maxval_) { maxval=maxval_; }
+    void set_max(T maxval_, size_t element_idx) { maxval[element_idx]=maxval_; }
+    void set_max(T maxval_) { maxval[0]=maxval_; maxval[1]=maxval_; }
 
     /**
      * @brief Set the setting value to default
@@ -97,9 +101,9 @@ public:
      */
     int push_back(T first, T second)
     {
-        if (first < get_min() || first > get_max())
+        if (first < get_min(0) || first > get_max(0))
             return -1;
-        if (second < get_min() || second > get_max())
+        if (second < get_min(1) || second > get_max(1))
             return -1;
         bimap.push_back({first,second});
         return static_cast<int>(bimap.size())-1;
@@ -111,7 +115,7 @@ public:
     {
         bool result = false;
         if (bimap_idx < bimap.size() && element_idx < 2) {
-            if (value >= get_min() && value <= get_max()) {
+            if (value >= get_min(element_idx) && value <= get_max(element_idx)) {
                 result = true;
                 bimap[bimap_idx][element_idx] = value;
             }
@@ -121,7 +125,7 @@ public:
 
     T get(size_t bimap_idx, size_t element_idx)
     {
-        T val = get_max()+1; // an invalid value
+        T val = get_max(element_idx)+1; // an invalid value
         if (bimap_idx < bimap.size() && element_idx < 2) {
             val = bimap[bimap_idx][element_idx];
         }
@@ -148,15 +152,15 @@ public:
      */
     virtual T incr(size_t bimap_idx, size_t element_idx, int delta)
     {
-        T number = get_max()+1; // an invalid number
+        T number = get_max(element_idx)+1; // an invalid number
         if (bimap_idx < bimap.size() && element_idx < 2) {
             T prev = bimap[bimap_idx][element_idx]; // detect unsigned number wrapping
             number = prev + delta;
-            if ((number > prev && delta < 0) || number < get_min()) {
-                number = get_min();
+            if ((number > prev && delta < 0) || number < get_min(element_idx)) {
+                number = get_min(element_idx);
             }
-            else if ((number < prev && delta > 0) || number > get_max()) {
-                number = get_max();
+            else if ((number < prev && delta > 0) || number > get_max(element_idx)) {
+                number = get_max(element_idx);
             }
             bimap[bimap_idx][element_idx] = number;
         }
@@ -264,8 +268,8 @@ public:
     }
 private:
     const char* name;
-    T minval;
-    T maxval;
+    T minval[2];
+    T maxval[2];
     std::vector<std::array<T,2>> bimap;
     T number;
 };

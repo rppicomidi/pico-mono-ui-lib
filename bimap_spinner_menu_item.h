@@ -80,7 +80,7 @@ public:
             return;
         T first = get_fn(context, bimap_idx, 0);
         T second = get_fn(context, bimap_idx, 1);
-        T max_val = get_fn(context, bimap_idx, 2) - 1; // The get() method returns the maximum value+1. Display max_val as all asterix
+        T max_val[2] = {static_cast<T>(get_fn(context, bimap_idx, 2) - 1), static_cast<T>(get_fn(context, bimap_idx, 3) - 1)}; // The get() method returns the maximum value+1. Display max_val as all asterix
         char first_str[ndigits+1];
         char second_str[ndigits+1];
         if (hex_format) {
@@ -93,12 +93,12 @@ public:
         }
         if (!display_maxval) {
             int disp_digits = hex_format? nhex_digits:ndigits;
-            if (first == max_val) {
+            if (first == max_val[0]) {
                 for (int idx=0; idx < disp_digits; idx++)
                     first_str[idx]='*';
                 first_str[disp_digits] = '\0';
             }
-            if (second == max_val) {
+            if (second == max_val[1]) {
                 for (int idx=0; idx < disp_digits; idx++)
                     second_str[idx]='*';
                 second_str[disp_digits] = '\0';
