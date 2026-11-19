@@ -55,6 +55,23 @@
 #define BUTTON_SHIFT 7
 #endif
 
+/**
+ * Set NAV_BUTTONS_3_BUTTON_MODE to 1 to use only the UP, DOWN, and ENTER
+ * buttons. In this mode the following button chords provide the missing
+ * navigation actions:
+ *
+ *   UP + DOWN          -> Back
+ *   ENTER + UP         -> Right
+ *   ENTER + DOWN       -> Shift + Left
+ *   ENTER + UP + DOWN  -> Home
+ *
+ * Chord actions and ENTER are generated once per press. UP and DOWN retain
+ * key-repeat behavior when pressed individually.
+ */
+#ifndef NAV_BUTTONS_3_BUTTON_MODE
+#define NAV_BUTTONS_3_BUTTON_MODE 0
+#endif
+
 namespace rppicomidi {
 class Nav_buttons
 {
